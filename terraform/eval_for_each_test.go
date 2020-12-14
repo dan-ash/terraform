@@ -126,7 +126,7 @@ func TestEvaluateForEachExpression_errors(t *testing.T) {
 				"b": cty.BoolVal(false),
 			}).Mark("sensitive")),
 			"Invalid for_each argument",
-			"Sensitive variables cannot be used as for_each arguments. If used, the sensitive value could be exposed as a resource instance key.",
+			"Sensitive variables cannot be used as for_each arguments. If used, the sensitive value could be exposed as a resource instance key. If this value is the result of a function (or so derived), results of functions called with sensitive values are always sensitive.",
 		},
 		"set containing booleans": {
 			hcltest.MockExprLiteral(cty.SetVal([]cty.Value{cty.BoolVal(true)})),
@@ -151,7 +151,7 @@ func TestEvaluateForEachExpression_errors(t *testing.T) {
 		"set containing marked values": {
 			hcltest.MockExprLiteral(cty.SetVal([]cty.Value{cty.StringVal("beep").Mark("sensitive"), cty.StringVal("boop")})),
 			"Invalid for_each argument",
-			"Sensitive variables cannot be used as for_each arguments. If used, the sensitive value could be exposed as a resource instance key.",
+			"Sensitive variables cannot be used as for_each arguments. If used, the sensitive value could be exposed as a resource instance key. If this value is the result of a function (or so derived), results of functions called with sensitive values are always sensitive.",
 		},
 	}
 

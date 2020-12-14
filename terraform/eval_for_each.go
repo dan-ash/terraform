@@ -65,7 +65,7 @@ func evaluateForEachExpressionValue(expr hcl.Expression, ctx EvalContext, allowU
 		diags = diags.Append(&hcl.Diagnostic{
 			Severity:    hcl.DiagError,
 			Summary:     "Invalid for_each argument",
-			Detail:      "Sensitive variables cannot be used as for_each arguments. If used, the sensitive value could be exposed as a resource instance key.",
+			Detail:      "Sensitive variables cannot be used as for_each arguments. If used, the sensitive value could be exposed as a resource instance key. If this value is the result of a function (or so derived), results of functions called with sensitive values are always sensitive.",
 			Subject:     expr.Range().Ptr(),
 			Expression:  expr,
 			EvalContext: hclCtx,
@@ -173,6 +173,7 @@ func evaluateForEachExpressionValue(expr hcl.Expression, ctx EvalContext, allowU
 
 const errInvalidForEachUnknownDetail = `The "for_each" value depends on resource attributes that cannot be determined until apply, so Terraform cannot predict how many instances will be created. To work around this, use the -target argument to first apply only the resources that the for_each depends on.`
 
+// markSafeLengthInt allows calling LengthInt on marked values safely
 func markSafeLengthInt(val cty.Value) int {
 	v, _ := val.UnmarkDeep()
 	return v.LengthInt()
